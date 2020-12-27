@@ -1,0 +1,5 @@
+url: https://github.com/EncoreCms/Platform
+versions:
+    "1.0.0":
+        added:
+          - initial Version
