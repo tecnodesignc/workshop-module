@@ -140,7 +140,7 @@ class ModuleScaffold
      */
     public function getName()
     {
-        return studly_case($this->name);
+        return Str::studly($this->name);
     }
 
     /**
@@ -244,6 +244,7 @@ class ModuleScaffold
     {
         $newProviders = <<<JSON
 "Modules\\\\{$this->name}\\\Providers\\\\{$this->name}ServiceProvider",
+        "Modules\\\\{$this->name}\\\Providers\\\\EventServiceProvider",
         "Modules\\\\{$this->name}\\\Providers\\\RouteServiceProvider"
 JSON;
 
@@ -259,7 +260,7 @@ JSON;
      */
     private function setModuleOrderOrder($content)
     {
-        return str_replace('"order": 0,', '"order": 1,', $content);
+        return str_replace('"priority": 0,', '"priority": 1,', $content);
     }
 
     /**
@@ -316,13 +317,13 @@ JSON;
     "type": "encore-module",
     "license": "MIT",
     "require": {
-        "php": ">=7.0.0",
+        "php": "^7.1.3",
         "composer/installers": "~1.0",
         "tecnodesignc/core-module": "~1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "~6.0",
-        "orchestra/testbench": "3.5.*"
+        "phpunit/phpunit": "~7.0",
+        "orchestra/testbench": "3.8.*"
     },
     "autoload-dev": {
         "psr-4": {
