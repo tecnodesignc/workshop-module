@@ -3,3 +3,6 @@ versions:
     "1.0.0":
         added:
           - initial Version
+    "1.0.1":
+        added:
+          - added lang files

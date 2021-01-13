@@ -3,6 +3,7 @@
 namespace Modules\Workshop\Scaffold\Module;
 
 use Illuminate\Contracts\Config\Repository;
+use Illuminate\Support\Str;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Filesystem\Filesystem;
 use Modules\Workshop\Scaffold\Module\Exception\ModuleExistsException;

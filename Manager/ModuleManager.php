@@ -5,6 +5,7 @@ namespace Modules\Workshop\Manager;
 use Illuminate\Config\Repository as Config;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
+use Nwidart\Modules\Contracts\RepositoryInterface;
 use Nwidart\Modules\Module;
 use Symfony\Component\Yaml\Parser;
 use Illuminate\Support\Arr;
