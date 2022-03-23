@@ -1,0 +1,31 @@
+$router->group(['prefix' =>'/$PLURAL_LOWERCASE_CLASS_NAME$'], function (Router $router) {
+
+    $router->get('/', [
+        'as' => 'api.$LOWERCASE_MODULE_NAME$.$LOWERCASE_CLASS_NAME$.index',
+        'uses' => '$CLASS_NAME$ApiController@index',
+        'middleware' => ['auth:api']
+    ]);
+
+    $router->post('/', [
+        'as' => 'api.$LOWERCASE_MODULE_NAME$.$LOWERCASE_CLASS_NAME$.store',
+        'uses' => '$CLASS_NAME$ApiController@store',
+        'middleware' => ['auth:api']
+    ]);
+
+    $router->get('/{criteria}', [
+        'as' => 'api.$LOWERCASE_MODULE_NAME$.$LOWERCASE_CLASS_NAME$.show',
+        'uses' => '$CLASS_NAME$ApiController@show',
+        'middleware' => ['auth:api']
+    ]);
+    $router->put('/{criteria}', [
+        'as' => 'api.$LOWERCASE_MODULE_NAME$.$LOWERCASE_CLASS_NAME$.update',
+        'uses' => '$CLASS_NAME$Controller@update',
+        'middleware' => ['auth:api']
+    ]);
+    $router->delete('/{criteria}', [
+        'as' => 'api.$LOWERCASE_MODULE_NAME$.$LOWERCASE_CLASS_NAME$.destroy',
+        'uses' => '$CLASS_NAME$ApiController@destroy',
+        'middleware' => ['auth:api']
+    ]);
+
+});
