@@ -2,10 +2,14 @@
 
 namespace Modules\Workshop\Http\Controllers\Admin;
 
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\View;
 use Modules\Core\Http\Controllers\Admin\AdminBaseController;
 use Modules\Workshop\Manager\ModuleManager;
 use Nwidart\Modules\Contracts\RepositoryInterface;
@@ -17,11 +21,11 @@ class ModulesController extends AdminBaseController
     /**
      * @var ModuleManager
      */
-    private $moduleManager;
+    private ModuleManager $moduleManager;
     /**
      * @var RepositoryInterface
      */
-    private $modules;
+    private RepositoryInterface $modules;
 
     public function __construct(ModuleManager $moduleManager, RepositoryInterface $modules)
     {
@@ -33,9 +37,9 @@ class ModulesController extends AdminBaseController
 
     /**
      * Display a list of all modules
-     * @return View
+     * @return View|Application|Factory
      */
-    public function index()
+    public function index(): Application|Factory|View
     {
         $modules = $this->modules->all();
 
@@ -45,9 +49,9 @@ class ModulesController extends AdminBaseController
     /**
      * Display module info
      * @param Module $module
-     * @return View
+     * @return Application|Factory|View
      */
-    public function show(Module $module)
+    public function show(Module $module): View|Factory|Application
     {
         $changelog = $this->moduleManager->changelogFor($module);
 
@@ -57,9 +61,9 @@ class ModulesController extends AdminBaseController
     /**
      * Disable the given module
      * @param Module $module
-     * @return mixed
+     * @return RedirectResponse
      */
-    public function disable(Module $module)
+    public function disable(Module $module): RedirectResponse
     {
         if ($this->isCoreModule($module)) {
             return redirect()->route('admin.workshop.modules.show', [$module->getLowerName()])
@@ -75,9 +79,9 @@ class ModulesController extends AdminBaseController
     /**
      * Enable the given module
      * @param Module $module
-     * @return mixed
+     * @return RedirectResponse
      */
-    public function enable(Module $module)
+    public function enable(Module $module): RedirectResponse
     {
         $module->enable();
 
@@ -90,9 +94,9 @@ class ModulesController extends AdminBaseController
     /**
      * Update a given module
      * @param Request $request
-     * @return Response json
+     * @return JsonResponse json
      */
-    public function update(Request $request)
+    public function update(Request $request): JsonResponse
     {
         $output = new BufferedOutput();
         Artisan::call('asgard:update', ['module' => $request->get('module')], $output);
@@ -105,9 +109,9 @@ class ModulesController extends AdminBaseController
      * @param Module $module
      * @return bool
      */
-    private function isCoreModule(Module $module)
+    private function isCoreModule(Module $module): bool
     {
-        $coreModules = array_flip(config('asgard.core.config.CoreModules'));
+        $coreModules = array_flip(config('encore.core.config.CoreModules'));
 
         return isset($coreModules[$module->getLowerName()]);
     }

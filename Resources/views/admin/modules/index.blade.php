@@ -30,7 +30,7 @@
                         <thead>
                         <tr>
                             <th>{{ trans('workshop::modules.table.name') }}</th>
-                            <th width="15%">{{ trans('workshop::modules.table.version') }}</th>
+                           {{-- <th width="15%">{{ trans('workshop::modules.table.version') }}</th>--}}
                             <th width="15%">{{ trans('workshop::modules.table.enabled') }}</th>
                         </tr>
                         </thead>
@@ -40,18 +40,18 @@
                         <tr>
                             <td>
                                 <a href="{{ route('admin.workshop.modules.show', [$module->getLowerName()]) }}">
-                                    {{ $module->name }}
+                                    {{ $module->getName() }}
                                 </a>
                             </td>
-                            <td>
+                           {{-- <td>
                                 <a href="{{ route('admin.workshop.modules.show', [$module->getLowerName()]) }}">
-                                    {{ module_version($module) }}
+                                   --}}{{-- {{ module_version($module) }}--}}{{--
                                 </a>
-                            </td>
+                            </td>--}}
                             <td>
                                 <a href="{{ route('admin.workshop.modules.show', [$module->getLowerName()]) }}">
-                                    <span class="label label-{{$module->enabled() ? 'success' : 'danger'}}">
-                                        {{ $module->enabled() ? trans('workshop::modules.enabled') : trans('workshop::modules.disabled') }}
+                                    <span class="label label-{{$module->isEnabled() ? 'success' : 'danger'}}">
+                                        {{ $module->isEnabled() ? trans('workshop::modules.enabled') : trans('workshop::modules.disabled') }}
                                     </span>
                                 </a>
                             </td>
@@ -62,7 +62,7 @@
                         <tfoot>
                         <tr>
                             <th>{{ trans('workshop::modules.table.name') }}</th>
-                            <th>{{ trans('workshop::modules.table.version') }}</th>
+{{--                            <th>{{ trans('workshop::modules.table.version') }}</th>--}}
                             <th>{{ trans('workshop::modules.table.enabled') }}</th>
                         </tr>
                         </tfoot>

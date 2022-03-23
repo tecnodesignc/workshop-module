@@ -12,9 +12,9 @@ class UpdateModuleCommand extends Command
     protected $description = 'Update a module';
 
     /**
-     * @var \Modules\Core\Services\Composer
+     * @var Composer
      */
-    private $composer;
+    private Composer $composer;
 
     public function __construct(Composer $composer)
     {
@@ -35,12 +35,15 @@ class UpdateModuleCommand extends Command
      * @param string $module
      * @return string
      */
-    private function getModulePackageName($module)
+    private function getModulePackageName(string $module): string
     {
         return "tecnodesignc/{$module}-module";
     }
 
-    protected function getArguments()
+    /**
+     * @return array
+     */
+    protected function getArguments(): array
     {
         return [
             ['module', InputArgument::REQUIRED, 'The module name'],

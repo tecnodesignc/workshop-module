@@ -36,8 +36,8 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <?php if (isset($themes)): ?>
-                            <?php foreach ($themes as $theme): ?>
+                        @if (isset($themes))
+                            @foreach ($themes as $theme)
                                 <tr>
                                     <td>
                                         <a href="{{ route('admin.workshop.themes.show', [$theme->getName()]) }}">
@@ -62,8 +62,8 @@
                                         </a>
                                     </td>
                                 </tr>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
+                            @endforeach
+                        @endif
                         </tbody>
                         <tfoot>
                         <tr>

@@ -2,16 +2,17 @@
 
 namespace Modules\Workshop\Http\Controllers\Admin;
 
-use FloatingPoint\Stylist\Theme\Theme;
+use Illuminate\View\View;
 use Modules\Core\Http\Controllers\Admin\AdminBaseController;
 use Modules\Workshop\Manager\ThemeManager;
+use Tecnodesignc\Stylist\Theme\Theme;
 
 class ThemesController extends AdminBaseController
 {
     /**
      * @var ThemeManager
      */
-    private $themeManager;
+    private ThemeManager $themeManager;
 
     public function __construct(ThemeManager $themeManager)
     {
@@ -21,9 +22,9 @@ class ThemesController extends AdminBaseController
     }
 
     /**
-     * @return \Illuminate\View\View
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
         $themes = $this->themeManager->all();
 
@@ -32,9 +33,9 @@ class ThemesController extends AdminBaseController
 
     /**
      * @param Theme $theme
-     * @return \Illuminate\View\View
+     * @return View
      */
-    public function show(Theme $theme)
+    public function show(Theme $theme): View
     {
         return view('workshop::admin.themes.show', compact('theme'));
     }

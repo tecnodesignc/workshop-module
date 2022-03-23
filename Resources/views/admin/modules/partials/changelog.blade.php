@@ -1,4 +1,4 @@
-<?php foreach ($changelog['versions'] as $version => $info): ?>
+@foreach ($changelog['versions'] as $version => $info)
 <dl class="dl-horizontal">
     <dt>
         <?php if (Illuminate\Support\Str::contains($version, ['unreleased', 'dev'])): ?>
@@ -36,4 +36,4 @@
         <?php endif; ?>
     </dd>
 </dl>
-<?php endforeach; ?>
+@endforeach

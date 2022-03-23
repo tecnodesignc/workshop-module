@@ -13,7 +13,7 @@ final class EntityScaffoldCommand extends Command
     /**
      * @var EntityGenerator
      */
-    private $entityGenerator;
+    private EntityGenerator $entityGenerator;
 
     public function __construct(EntityGenerator $entityGenerator)
     {
@@ -22,6 +22,9 @@ final class EntityScaffoldCommand extends Command
         $this->entityGenerator = $entityGenerator;
     }
 
+    /**
+     * @return void
+     */
     public function handle()
     {
         $this->entityGenerator
@@ -32,7 +35,10 @@ final class EntityScaffoldCommand extends Command
         $this->info('Entity files generated.');
     }
 
-    protected function getArguments()
+    /**
+     * @return array
+     */
+    protected function getArguments(): array
     {
         return [
             ['entity', InputArgument::REQUIRED, 'The name of the entity.'],

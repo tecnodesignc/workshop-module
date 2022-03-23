@@ -3,6 +3,10 @@
 namespace Modules\Workshop\Console;
 
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Config\Repository;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Filesystem\Filesystem;
+use Modules\Workshop\Scaffold\Module\Exception\ModuleExistsException;
 use Modules\Workshop\Scaffold\Module\ModuleScaffold;
 
 class ModuleScaffoldCommand extends Command
@@ -12,19 +16,19 @@ class ModuleScaffoldCommand extends Command
     /**
      * @var array
      */
-    protected $entities = [];
+    protected array $entities = [];
     /**
      * @var array
      */
-    protected $valueObjects = [];
+    protected array $valueObjects = [];
     /**
      * @var string The type of entities to generate [Eloquent or Doctrine]
      */
-    protected $entityType;
+    protected string $entityType;
     /**
      * @var ModuleScaffold
      */
-    private $moduleScaffold;
+    private ModuleScaffold $moduleScaffold;
 
     public function __construct(ModuleScaffold $moduleScaffold)
     {
@@ -34,7 +38,7 @@ class ModuleScaffoldCommand extends Command
 
     /**
      *
-     * @throws \Modules\Workshop\Scaffold\Module\Exception\ModuleExistsException
+     * @throws ModuleExistsException|FileNotFoundException
      */
     public function handle()
     {
@@ -87,10 +91,10 @@ class ModuleScaffoldCommand extends Command
 
     /**
      * Extract the vendor and module name as two separate values
-     * @param  string $fullName
+     * @param string $fullName
      * @return array
      */
-    private function separateVendorAndName($fullName)
+    private function separateVendorAndName(string $fullName): array
     {
         $explodedFullName = explode('/', $fullName);
 
@@ -105,11 +109,11 @@ class ModuleScaffoldCommand extends Command
      *
      * @param string $name
      */
-    private function checkForModuleUniqueness($name)
+    private function checkForModuleUniqueness(string $name)
     {
-        /** @var \Illuminate\Filesystem\Filesystem $files */
+        /** @var Filesystem $files */
         $files = app('Illuminate\Filesystem\Filesystem');
-        /** @var \Illuminate\Contracts\Config\Repository $config */
+        /** @var Repository $config */
         $config = app('Illuminate\Contracts\Config\Repository');
         if ($files->isDirectory($config->get('modules.paths.modules') . "/{$name}")) {
             return $this->error("The module [$name] already exists");

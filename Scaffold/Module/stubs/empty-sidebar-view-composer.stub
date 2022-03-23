@@ -12,7 +12,7 @@ class SidebarExtender implements \Maatwebsite\Sidebar\SidebarExtender
     /**
      * @var Authentication
      */
-    protected $auth;
+    protected Authentication $auth;
 
     /**
      * @param Authentication $auth

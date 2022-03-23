@@ -7,6 +7,8 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
 use Nwidart\Modules\Contracts\RepositoryInterface;
 use Nwidart\Modules\Module;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\Yaml\Parser;
 use Illuminate\Support\Arr;
 
@@ -15,19 +17,19 @@ class ModuleManager
     /**
      * @var Module
      */
-    private $module;
+    private mixed $module;
     /**
      * @var Config
      */
-    private $config;
+    private Config $config;
     /**
      * @var PackageInformation
      */
-    private $packageVersion;
+    private PackageInformation $packageVersion;
     /**
      * @var Filesystem
      */
-    private $finder;
+    private Filesystem $finder;
 
     /**
      * @param Config $config
@@ -44,16 +46,16 @@ class ModuleManager
 
     /**
      * Return all modules
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
-    public function all()
+    public function all(): Collection
     {
         $modules = new Collection($this->module->all());
 
         foreach ($modules as $module) {
             $moduleName = $module->getName();
-            $package = $this->packageVersion->getPackageInfo("encorecms/$moduleName-module");
-            $module->version = isset($package->version) ? $package->version: 'N/A';
+            $package = $this->packageVersion->getPackageInfo("tecnodesignc/$moduleName-module");
+            $module->version = $package->version ?? 'N/A';
             $module->versionUrl = '#';
             if (isset($package->source->url)) {
                 $packageUrl = str_replace('.git', '', $package->source->url);
@@ -68,7 +70,7 @@ class ModuleManager
      * Return all the enabled modules
      * @return array
      */
-    public function enabled()
+    public function enabled(): array
     {
         return $this->module->enabled();
     }
@@ -77,7 +79,7 @@ class ModuleManager
      * Get the core modules that shouldn't be disabled
      * @return array|mixed
      */
-    public function getCoreModules()
+    public function getCoreModules(): mixed
     {
         $coreModules = $this->config->get('encore.core.config.CoreModules');
         $coreModules = array_flip($coreModules);
@@ -89,7 +91,7 @@ class ModuleManager
      * Get the enabled modules, with the module name as the key
      * @return array
      */
-    public function getFlippedEnabledModules()
+    public function getFlippedEnabledModules(): array
     {
         $enabledModules = $this->module->enabled();
 
@@ -103,6 +105,8 @@ class ModuleManager
     /**
      * Disable the given modules
      * @param $enabledModules
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     public function disableModules($enabledModules)
     {
@@ -120,6 +124,8 @@ class ModuleManager
     /**
      * Enable the given modules
      * @param $modules
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     public function enableModules($modules)
     {
@@ -134,7 +140,7 @@ class ModuleManager
      * @param Module $module
      * @return array
      */
-    public function changelogFor(Module $module)
+    public function changelogFor(Module $module): array
     {
         $path = $module->getPath() . '/changelog.yml';
         if (! $this->finder->isFile($path)) {
@@ -155,8 +161,8 @@ class ModuleManager
      * @param array $versions
      * @return array
      */
-    private function limitLastVersionsAmount(array $versions)
+    private function limitLastVersionsAmount(array $versions): array
     {
-        return array_slice($versions, 0, 5);
+        return array_slice($versions, 0, 20);
     }
 }

@@ -2,13 +2,16 @@
 
 namespace Modules\Workshop\Scaffold\Module\Generators;
 
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
+
 class ValueObjectGenerator extends Generator
 {
     /**
      * Generate the given files
      *
-     * @param  array $valueObjects
+     * @param array $valueObjects
      * @return void
+     * @throws FileNotFoundException
      */
     public function generate(array $valueObjects)
     {

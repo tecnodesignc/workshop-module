@@ -10,7 +10,7 @@ class MigrateViewComposer
     /**
      * @var ModuleManager
      */
-    private $module;
+    private ModuleManager $module;
 
     public function __construct(ModuleManager $module)
     {

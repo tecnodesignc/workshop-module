@@ -3,6 +3,7 @@
 namespace Modules\Workshop\Scaffold\Module;
 
 use Illuminate\Contracts\Config\Repository;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Str;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Filesystem\Filesystem;
@@ -17,26 +18,26 @@ class ModuleScaffold
      * Contains the vendor name
      * @var string
      */
-    protected $vendor;
+    protected string $vendor;
     /**
      * Contains the Module name
      * @var string
      */
-    protected $name;
+    protected string $name;
     /**
      * Contains an array of entities to generate
      * @var array
      */
-    protected $entities;
+    protected array $entities;
     /**
      * Contains an array of value objects to generate
      * @var array
      */
-    protected $valueObjects;
+    protected array $valueObjects;
     /**
      * @var array of files to generate
      */
-    protected $files = [
+    protected array $files = [
         'permissions.stub' => 'Config/permissions',
         'routes.stub' => 'Http/backendRoutes',
         'routes-api.stub' => 'Http/apiRoutes',
@@ -45,31 +46,31 @@ class ModuleScaffold
     /**
      * @var string The type of entities to generate [Eloquent or Doctrine]
      */
-    protected $entityType;
+    protected string $entityType;
     /**
      * @var Kernel
      */
-    private $artisan;
+    private mixed $artisan;
     /**
      * @var Filesystem
      */
-    private $finder;
+    private Filesystem $finder;
     /**
      * @var Repository
      */
-    private $config;
+    private Repository $config;
     /**
      * @var EntityGenerator
      */
-    private $entityGenerator;
+    private EntityGenerator $entityGenerator;
     /**
      * @var ValueObjectGenerator
      */
-    private $valueObjectGenerator;
+    private ValueObjectGenerator $valueObjectGenerator;
     /**
      * @var FilesGenerator
      */
-    private $filesGenerator;
+    private FilesGenerator $filesGenerator;
 
     public function __construct(
         Filesystem $finder,
@@ -88,6 +89,7 @@ class ModuleScaffold
 
     /**
      *
+     * @throws ModuleExistsException|FileNotFoundException
      */
     public function scaffold()
     {
@@ -112,10 +114,10 @@ class ModuleScaffold
     }
 
     /**
-     * @param  string $vendor
+     * @param string $vendor
      * @return $this
      */
-    public function vendor($vendor)
+    public function vendor(string $vendor): static
     {
         $this->vendor = $vendor;
 
@@ -123,10 +125,10 @@ class ModuleScaffold
     }
 
     /**
-     * @param  string $name
+     * @param string $name
      * @return $this
      */
-    public function name($name)
+    public function name(string $name): static
     {
         $this->name = $name;
 
@@ -138,17 +140,17 @@ class ModuleScaffold
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return Str::studly($this->name);
     }
 
     /**
      * Set the entity type [Eloquent, Doctrine]
-     * @param  string $entityType
+     * @param string $entityType
      * @return $this
      */
-    public function setEntityType($entityType)
+    public function setEntityType(string $entityType): static
     {
         $this->entityType = $entityType;
 
@@ -159,7 +161,7 @@ class ModuleScaffold
      * @param  array $entities
      * @return $this
      */
-    public function withEntities(array $entities)
+    public function withEntities(array $entities): static
     {
         $this->entities = $entities;
 
@@ -170,7 +172,7 @@ class ModuleScaffold
      * @param  array $valueObjects
      * @return $this
      */
-    public function withValueObjects(array $valueObjects)
+    public function withValueObjects(array $valueObjects): static
     {
         $this->valueObjects = $valueObjects;
 
@@ -179,16 +181,16 @@ class ModuleScaffold
 
     /**
      * Return the current module path
-     * @param  string $path
+     * @param string $path
      * @return string
      */
-    private function getModulesPath($path = '')
+    private function getModulesPath(string $path = ''): string
     {
         return $this->config->get('modules.paths.modules') . "/{$this->getName()}/$path";
     }
 
     /**
-     * Rename the default vendor name 'pingpong-modules'
+     * Rename the default vendor name 'ping pong-modules'
      * by the input vendor name
      */
     private function renameVendorName()
@@ -221,7 +223,7 @@ class ModuleScaffold
     }
 
     /**
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws FileNotFoundException
      */
     private function cleanUpModuleJson()
     {
@@ -231,7 +233,7 @@ class ModuleScaffold
         $moduleJson = $this->setModuleOrderOrder($moduleJson);
         $moduleJson = $this->setModuleVersion($moduleJson);
         $moduleJson = $this->removeStartPhpFile($moduleJson);
-
+        $moduleJson = $this->addDataToModuleFile($moduleJson);
         $this->finder->put($this->getModulesPath('module.json'), $moduleJson);
     }
 
@@ -240,11 +242,10 @@ class ModuleScaffold
      * @param string $content
      * @return string
      */
-    private function loadProviders($content)
+    private function loadProviders(string $content): string
     {
         $newProviders = <<<JSON
 "Modules\\\\{$this->name}\\\Providers\\\\{$this->name}ServiceProvider",
-        "Modules\\\\{$this->name}\\\Providers\\\\EventServiceProvider",
         "Modules\\\\{$this->name}\\\Providers\\\RouteServiceProvider"
 JSON;
 
@@ -258,7 +259,7 @@ JSON;
      * @param string $content
      * @return string
      */
-    private function setModuleOrderOrder($content)
+    private function setModuleOrderOrder(string $content): string
     {
         return str_replace('"priority": 0,', '"priority": 1,', $content);
     }
@@ -268,18 +269,44 @@ JSON;
      * @param string $content
      * @return string
      */
-    private function setModuleVersion($content)
+    private function setModuleVersion(string $content): string
     {
         return str_replace("\"active\"", "\"version\": \"1.0.0\",\n\t\"active\"", $content);
     }
 
     /**
-     * Remove the start.php start file
-     * Also removes the auto loading of that file
+     * Add more data in module json
+     * - title
+     * - author
+     * - minimum Core Version
      * @param string $content
      * @return string
      */
-    private function removeStartPhpFile($content)
+    private function addDataToModuleFile(string $content): string
+    {
+        $name = ucfirst($this->name);
+
+        $search = <<<JSON
+"name": "$name",
+JSON;
+        $replace = <<<JSON
+"title": "$name",
+    "name": "$name",
+    "version":"1.0.0",
+    "minimumCoreVersion": "2.0",
+    "author": "Encore CMS",
+JSON;
+        return str_replace($search, $replace, $content);
+    }
+
+
+    /**
+     * Remove the start.php start file
+     * Also removes the auto-loading of that file
+     * @param string $content
+     * @return string
+     */
+    private function removeStartPhpFile(string $content): string
     {
         $this->finder->delete($this->getModulesPath('start.php'));
 
@@ -301,7 +328,7 @@ JSON;
      * - package requirements
      * - minimum stability
      * - prefer stable
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws FileNotFoundException
      */
     private function addDataToComposerFile()
     {
@@ -313,13 +340,28 @@ JSON;
 "description": "",
 JSON;
         $replace = <<<JSON
-"description": "",
+"description": "The $name module for EncoreCMS 2.0",
     "type": "encore-module",
     "license": "MIT",
+    "keywords": [
+        "encore cms",
+        "$name"
+    ],
+     "authors": [
+        {
+            "name": "Marcos Rativa",
+            "email": "marcos21.009@gmail.com"
+        }
+    ],
+    "support": {
+        "email": "support@tecnodesign.com.co",
+        "issues": "https://github.com/tecnodesignc/encorecms/issues",
+        "source": "https://github.com/tecnodesignc/$name-module"
+    },
     "require": {
-        "php": "^7.1.3",
-        "composer/installers": "~1.0",
-        "tecnodesignc/core-module": "~1.0"
+        "php": ">=8.0",
+        "composer/installers": "^2.1",
+        "tecnodesignc/core-module": "^2.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~7.0",
@@ -328,7 +370,7 @@ JSON;
     "autoload-dev": {
         "psr-4": {
             "Modules\\\\$name\\\\": ".",
-            "Modules\\\\": "Modules/"
+            "Modules\\\\": "modules/"
         }
     },
     "minimum-stability": "stable",
@@ -340,7 +382,7 @@ JSON;
 
     /**
      * Adding the module name to the .gitignore file so that it can be committed
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws FileNotFoundException
      */
     private function addModuleToIgnoredExceptions()
     {

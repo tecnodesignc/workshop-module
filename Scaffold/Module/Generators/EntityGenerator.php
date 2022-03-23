@@ -2,7 +2,9 @@
 
 namespace Modules\Workshop\Scaffold\Module\Generators;
 
+use Exception;
 use Illuminate\Contracts\Config\Repository;
+use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
@@ -10,7 +12,7 @@ use Illuminate\Support\Str;
 class EntityGenerator extends Generator
 {
     /**
-     * @var \Illuminate\Contracts\Console\Kernel
+     * @var Kernel
      */
     protected $artisan;
 
@@ -33,8 +35,9 @@ class EntityGenerator extends Generator
      *
      * @param array $entities
      * @param bool $regenerateSidebar
+     * @throws FileNotFoundException
      */
-    public function generate(array $entities, $regenerateSidebar = true)
+    public function generate(array $entities, bool $regenerateSidebar = true)
     {
         $entityType = strtolower($this->entityType);
         $entityTypeStub = "entity-{$entityType}.stub";
@@ -71,8 +74,9 @@ class EntityGenerator extends Generator
      * Generate the repositories for the given entity
      *
      * @param string $entity
+     * @throws FileNotFoundException
      */
-    private function generateRepositoriesFor($entity)
+    private function generateRepositoriesFor(string $entity)
     {
         if (! $this->finder->isDirectory($this->getModulesPath('Repositories/' . $this->entityType))) {
             $this->finder->makeDirectory($this->getModulesPath('Repositories/' . $this->entityType));
@@ -97,8 +101,9 @@ class EntityGenerator extends Generator
      * Generate the controller for the given entity
      *
      * @param string $entity
+     * @throws FileNotFoundException
      */
-    private function generateControllerFor($entity)
+    private function generateControllerFor(string $entity)
     {
         $path = $this->getModulesPath('Http/Controllers/Admin');
         if (! $this->finder->isDirectory($path)) {
@@ -108,14 +113,24 @@ class EntityGenerator extends Generator
             $this->getModulesPath("Http/Controllers/Admin/{$entity}Controller"),
             $this->getContentForStub('admin-controller.stub', $entity)
         );
+
+        $path = $this->getModulesPath('Http/Controllers/Api');
+        if (! $this->finder->isDirectory($path)) {
+            $this->finder->makeDirectory($path);
+        }
+        $this->writeFile(
+            $this->getModulesPath("Http/Controllers/Api/{$entity}ApiController"),
+            $this->getContentForStub('api-controller.stub', $entity)
+        );
     }
 
     /**
      * Generate the requests for the given entity
      *
      * @param string $entity
+     * @throws FileNotFoundException
      */
-    private function generateRequestsFor($entity)
+    private function generateRequestsFor(string $entity)
     {
         $path = $this->getModulesPath('Http/Requests');
         if (! $this->finder->isDirectory($path)) {
@@ -135,8 +150,9 @@ class EntityGenerator extends Generator
      * Generate views for the given entity
      *
      * @param string $entity
+     * @throws FileNotFoundException
      */
-    private function generateViewsFor($entity)
+    private function generateViewsFor(string $entity)
     {
         $lowerCasePluralEntity = strtolower(Str::plural($entity));
         $this->finder->makeDirectory($this->getModulesPath("Resources/views/admin/{$lowerCasePluralEntity}/partials"), 0755, true);
@@ -153,8 +169,9 @@ class EntityGenerator extends Generator
     /**
      * Generate language files for the given entity
      * @param string $entity
+     * @throws FileNotFoundException
      */
-    private function generateLanguageFilesFor($entity)
+    private function generateLanguageFilesFor(string $entity)
     {
         $lowerCaseEntity = Str::plural(strtolower($entity));
         $path = $this->getModulesPath('Resources/lang/en');
@@ -171,8 +188,9 @@ class EntityGenerator extends Generator
      * Generate migrations file for eloquent entities
      *
      * @param string $entity
+     * @throws FileNotFoundException
      */
-    private function generateMigrationsFor($entity)
+    private function generateMigrationsFor(string $entity)
     {
         usleep(250000);
         $lowercasePluralEntityName = strtolower(Str::plural($entity));
@@ -192,12 +210,30 @@ class EntityGenerator extends Generator
     }
 
     /**
-     * Append the IoC bindings for the given entity to the Service Provider
+     * Generate transformers file for eloquent entities
      *
-     * @param  string                                       $entity
+     * @param string $entity
      * @throws FileNotFoundException
      */
-    private function appendBindingsToServiceProviderFor($entity)
+    private function generateTransformersFor(string $entity)
+    {
+        $path = $this->getModulesPath('Transformers');
+        if (! $this->finder->isDirectory($path)) {
+            $this->finder->makeDirectory($path);
+        }
+        $this->writeFile(
+            $this->getModulesPath("Transformers/{$entity}Transformer"),
+            $this->getContentForStub('create-transformers.stub', $entity)
+        );
+    }
+
+    /**
+     * Append the IoC bindings for the given entity to the Service Provider
+     *
+     * @param string $entity
+     * @throws FileNotFoundException
+     */
+    private function appendBindingsToServiceProviderFor(string $entity)
     {
         $moduleProviderContent = $this->finder->get($this->getModulesPath("Providers/{$this->name}ServiceProvider.php"));
         $binding = $this->getContentForStub('bindings.stub', $entity);
@@ -208,19 +244,26 @@ class EntityGenerator extends Generator
     /**
      * Append the routes for the given entity to the routes file
      *
-     * @param  string                                       $entity
+     * @param string $entity
      * @throws FileNotFoundException
      */
-    private function appendResourceRoutesToRoutesFileFor($entity)
+    private function appendResourceRoutesToRoutesFileFor(string $entity)
     {
         $routeContent = $this->finder->get($this->getModulesPath('Http/backendRoutes.php'));
         $content = $this->getContentForStub('route-resource.stub', $entity);
         $routeContent = str_replace('// append', $content, $routeContent);
         $this->finder->put($this->getModulesPath('Http/backendRoutes.php'), $routeContent);
+
+        $routeContent = $this->finder->get($this->getModulesPath('Http/apiRoutes.php'));
+        $content = $this->getContentForStub('route-api-resource.stub', $entity);
+        $routeContent = str_replace('// append', $content, $routeContent);
+        $this->finder->put($this->getModulesPath('Http/apiRoutes.php'), $routeContent);
+
+
     }
 
     /**
-     * @param  string                                       $entity
+     * @param  string $entity
      * @throws FileNotFoundException
      */
     private function appendPermissionsFor($entity)
@@ -233,8 +276,9 @@ class EntityGenerator extends Generator
 
     /**
      * @param string $entity
+     * @throws FileNotFoundException
      */
-    private function appendSidebarLinksFor($entity)
+    private function appendSidebarLinksFor(string $entity)
     {
         $sidebarComposerContent = $this->finder->get($this->getModulesPath("Events/Handlers/Register{$this->name}Sidebar.php"));
         $content = $this->getContentForStub('append-sidebar-extender.stub', $entity);
@@ -245,8 +289,9 @@ class EntityGenerator extends Generator
 
     /**
      * @param string $entity
+     * @throws FileNotFoundException
      */
-    private function appendBackendTranslations($entity)
+    private function appendBackendTranslations(string $entity)
     {
         $moduleProviderContent = $this->finder->get($this->getModulesPath("Providers/{$this->name}ServiceProvider.php"));
 
@@ -259,6 +304,7 @@ class EntityGenerator extends Generator
      * Generate a filled sidebar view composer
      * Or an empty one of no entities
      * @param $entities
+     * @throws FileNotFoundException
      */
     private function generateSidebarExtender($entities)
     {
@@ -280,6 +326,7 @@ class EntityGenerator extends Generator
     /**
      * Generate a sidebar event listener
      * @param $entities
+     * @throws FileNotFoundException
      */
     public function generateSidebarListener($entities)
     {
@@ -301,8 +348,9 @@ class EntityGenerator extends Generator
     /**
      * Get the current time with microseconds
      * @return string
+     * @throws Exception
      */
-    private function getDateTimePrefix()
+    private function getDateTimePrefix(): string
     {
         $t = microtime(true);
         $micro = sprintf("%06d", ($t - floor($t)) * 1000000);

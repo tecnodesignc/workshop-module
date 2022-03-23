@@ -1,8 +1,12 @@
-url: https://github.com/EncoreCms/Platform
+url: https://github.com/tecnodesignc/workshop-module
 versions:
-    "1.0.0":
-        added:
-          - initial Version
+
+  "2.0.0":
+    changed:
+      - Laravel 9 compatibility
     "1.0.1":
-        added:
-          - added lang files
+      added:
+        - added lang files
+    "1.0.0":
+      added:
+        - initial Version

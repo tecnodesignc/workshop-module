@@ -1,7 +1,7 @@
 {
   "name": "tecnodesignc/workshop-module",
   "type": "encore-module",
-  "description": "Workshop module for EncoreCMS. Handles the activation of modules.",
+  "description": "Workshop module for EncoreCMS 2. Handles the activation of modules.",
   "keywords": [
     "encorecms",
     "workshop",
@@ -22,8 +22,8 @@
   },
   "require": {
     "php": ">=7.1.3",
-    "composer/installers": "~1.0",
-    "symfony/yaml": "^5.1"
+    "composer/installers": "^2.1",
+    "symfony/yaml": "^6.0"
   },
   "require-dev": {
     "phpunit/phpunit": "~7.0",
@@ -33,7 +33,7 @@
   "autoload-dev": {
     "psr-4": {
       "Modules\\Workshop\\": ".",
-      "Modules\\": "Modules/"
+      "Modules\\": "modules/"
     }
   },
   "extra": {

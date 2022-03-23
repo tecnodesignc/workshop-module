@@ -129,7 +129,7 @@ class ThemeScaffoldTest extends BaseTestCase
         $this->generateFrontendTheme();
 
         $this->assertTrue($this->finder->isFile($this->testThemePath . '/composer.json'));
-        $this->assertTrue(Str::contains($this->finder->get($this->testThemePath . '/composer.json'), '"name": "asgardcms/TestingTheme-theme",'));
+        $this->assertTrue(Str::contains($this->finder->get($this->testThemePath . '/composer.json'), '"name": "EncoreCMS/TestingTheme-theme",'));
     }
 
     /** @test */

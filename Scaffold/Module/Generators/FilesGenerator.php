@@ -10,8 +10,9 @@ class FilesGenerator extends Generator
     /**
      * Generate the given files
      *
-     * @param  array $files
+     * @param array $files
      * @return void
+     * @throws FileNotFoundException
      */
     public function generate(array $files)
     {
@@ -26,8 +27,9 @@ class FilesGenerator extends Generator
     /**
      * Generate the base module service provider
      * @return $this
+     * @throws FileNotFoundException
      */
-    public function generateModuleProvider()
+    public function generateModuleProvider(): static
     {
         $this->writeFile(
             $this->getModulesPath("Providers/{$this->name}ServiceProvider"),
@@ -44,7 +46,7 @@ class FilesGenerator extends Generator
      * @return string
      * @throws FileNotFoundException
      */
-    private function getContentFor($stub)
+    private function getContentFor($stub): string
     {
         $stub = $this->finder->get($this->getStubPath($stub));
 
