@@ -1,6 +1,10 @@
 url: https://github.com/tecnodesignc/workshop-module
 versions:
-
+  "2.0.1":
+    changed:
+      - Fix entity and message in ApiControler Stubs
+      - Fix add generator Tranformers in EntityGenerator
+      - Fix appenen in rutes Stubs
   "2.0.0":
     changed:
       - Laravel 9 compatibility

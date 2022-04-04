@@ -65,9 +65,9 @@ class $CLASS_NAME$Controller extends BaseApiController
 
           $params = $this->getParamsRequest($request);
 
-          $LOWERCASE_CLASS_NAME$ = $this->$LOWERCASE_CLASS_NAME$->getItem($params);
+          $$LOWERCASE_CLASS_NAME$ = $this->$LOWERCASE_CLASS_NAME$->getItem($params);
 
-          if(!$LOWERCASE_CLASS_NAME$) throw new Exception(trans('core::core.exceptions.item no found', ['item' => trans('$LOWERCASE_MODULE_NAME$::$PLURAL_LOWERCASE_CLASS_NAME$.title.$PLURAL_LOWERCASE_CLASS_NAME$'),404);
+          if(!$$LOWERCASE_CLASS_NAME$) throw new Exception(trans('core::core.exceptions.item no found', ['item' => trans('$LOWERCASE_MODULE_NAME$::$PLURAL_LOWERCASE_CLASS_NAME$.title.$PLURAL_LOWERCASE_CLASS_NAME$')]),404);
 
           $response = ["data" => new $CLASS_NAME$Transformer($$LOWERCASE_CLASS_NAME$)];
 
@@ -98,9 +98,9 @@ class $CLASS_NAME$Controller extends BaseApiController
 
             $this->validateRequestApi(new Create$CLASS_NAME$Request($data));
 
-            $LOWERCASE_CLASS_NAME$ = $this->$LOWERCASE_CLASS_NAME$->create($data);
+            $$LOWERCASE_CLASS_NAME$ = $this->$LOWERCASE_CLASS_NAME$->create($data);
 
-            $response = ["data" => new CLASS_NAME$Transformer($$LOWERCASE_CLASS_NAME$)];
+            $response = ["data" => new $CLASS_NAME$Transformer($$LOWERCASE_CLASS_NAME$)];
 
             \DB::commit();
 
@@ -136,9 +136,9 @@ class $CLASS_NAME$Controller extends BaseApiController
 
             $params = $this->getParamsRequest($request);
 
-            $LOWERCASE_CLASS_NAME$ = $this->$LOWERCASE_CLASS_NAME$->getItem($params);
+            $$LOWERCASE_CLASS_NAME$ = $this->$LOWERCASE_CLASS_NAME$->getItem($params);
 
-            if(!$LOWERCASE_CLASS_NAME$) throw new Exception(trans('core::core.exceptions.item no found', ['item' => trans('$LOWERCASE_MODULE_NAME$::$PLURAL_LOWERCASE_CLASS_NAME$.title.$PLURAL_LOWERCASE_CLASS_NAME$'),404);
+            if(!$$LOWERCASE_CLASS_NAME$) throw new Exception(trans('core::core.exceptions.item no found', ['item' => trans('$LOWERCASE_MODULE_NAME$::$PLURAL_LOWERCASE_CLASS_NAME$.title.$PLURAL_LOWERCASE_CLASS_NAME$')]),404);
 
             $this->$LOWERCASE_CLASS_NAME$->update($$LOWERCASE_CLASS_NAME$, $request->all());
 
@@ -174,9 +174,9 @@ class $CLASS_NAME$Controller extends BaseApiController
 
             $params = $this->getParamsRequest($request);
 
-            $LOWERCASE_CLASS_NAME$ = $this->$LOWERCASE_CLASS_NAME$->getItem($params);
+            $$LOWERCASE_CLASS_NAME$ = $this->$LOWERCASE_CLASS_NAME$->getItem($params);
 
-            if(!$LOWERCASE_CLASS_NAME$) throw new Exception(trans('core::core.exceptions.item no found', ['item' => trans('$LOWERCASE_MODULE_NAME$::$PLURAL_LOWERCASE_CLASS_NAME$.title.$PLURAL_LOWERCASE_CLASS_NAME$'),404);
+            if(!$$LOWERCASE_CLASS_NAME$) throw new Exception(trans('core::core.exceptions.item no found', ['item' => trans('$LOWERCASE_MODULE_NAME$::$PLURAL_LOWERCASE_CLASS_NAME$.title.$PLURAL_LOWERCASE_CLASS_NAME$')]),404);
 
             $this->$LOWERCASE_CLASS_NAME$->destroy($$LOWERCASE_CLASS_NAME$);
 

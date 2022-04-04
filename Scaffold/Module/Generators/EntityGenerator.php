@@ -67,6 +67,7 @@ class EntityGenerator extends Generator
             $this->appendPermissionsFor($entity);
             $this->appendSidebarLinksFor($entity);
             $this->appendBackendTranslations($entity);
+            $this->generateTransformersFor($entity);
         }
     }
 

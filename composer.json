@@ -21,7 +21,7 @@
     "source": "https://github.com/tecnodesignc/Workshop"
   },
   "require": {
-    "php": ">=7.1.3",
+    "php": ">=8.0",
     "composer/installers": "^2.1",
     "symfony/yaml": "^6.0"
   },
