@@ -1,5 +1,8 @@
 url: https://github.com/tecnodesignc/workshop-module
 versions:
+  "2.1.0":
+    changed:
+      - Laravel 10 compatibility
   "2.0.1":
     changed:
       - Fix entity and message in ApiControler Stubs

@@ -1,7 +1,7 @@
 {
   "name": "tecnodesignc/workshop-module",
   "type": "encore-module",
-  "description": "Workshop module for EncoreCMS 2. Handles the activation of modules.",
+  "description": "Workshop module for EncoreCMS 2.1. Handles the activation of modules.",
   "keywords": [
     "encorecms",
     "workshop",
@@ -11,14 +11,14 @@
   "authors": [
     {
       "name": "Marcos Rativa",
-      "email": "supoert@tecnodesign.com.co",
+      "email": "info@tecnodesign.com.co",
       "role": "Developer"
     }
   ],
   "support": {
     "email": "supoert@tecnodesign.com.co",
-    "issues": "https://github.com/tecnodesignc/Platform/issues",
-    "source": "https://github.com/tecnodesignc/Workshop"
+    "issues": "https://github.com/tecnodesignc/encorecms/issues",
+    "source": "https://github.com/tecnodesignc/Wworkshop-module"
   },
   "require": {
     "php": ">=8.0",
@@ -26,11 +26,11 @@
     "symfony/yaml": "^6.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "~7.0",
+    "phpunit/phpunit": "^9.5",
     "orchestra/testbench": "3.8.*",
-    "spatie/phpunit-snapshot-assertions": "^1.0"
+    "spatie/phpunit-snapshot-assertions": "^5.0.1"
   },
-  "autoload-dev": {
+  "autoload": {
     "psr-4": {
       "Modules\\Workshop\\": ".",
       "Modules\\": "modules/"
@@ -38,7 +38,7 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-master": "1.0.x-dev"
+      "dev-master": "2.1.x-dev"
     }
   },
   "minimum-stability": "dev",

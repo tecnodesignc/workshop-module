@@ -1,5 +1,5 @@
 {
-    "title": "Core",
+    "title": "Workshop",
     "name": "Workshop",
     "alias": "workshop",
     "description": "Module used to handle the create of new modules.",
@@ -9,7 +9,7 @@
     ],
     "author": "Marcos Rativa",
     "require": {},
-    "version": "2.0.1",
+    "version": "2.1.0",
     "active": 1,
     "priority": 1,
     "providers": [
@@ -20,5 +20,7 @@
         "composers.php",
         "helpers.php"
     ],
-    "minimumCoreVersion": "2.0"
+    "minimumCoreVersion": "2.1",
+    "compatibility": "2.1",
+    "authors": ["Marcos Rativa"]
 }
