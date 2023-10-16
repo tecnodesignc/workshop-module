@@ -4,7 +4,6 @@ namespace Modules\$MODULE_NAME$\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Log;
 use Mockery\CountValidator\Exception;
 use Modules\$MODULE_NAME$\Entities\$CLASS_NAME$;
 use Modules\$MODULE_NAME$\Http\Requests\Create$CLASS_NAME$Request;
@@ -12,6 +11,7 @@ use Modules\$MODULE_NAME$\Http\Requests\Update$CLASS_NAME$Request;
 use Modules\$MODULE_NAME$\Repositories\$CLASS_NAME$Repository;
 use Modules\$MODULE_NAME$\Transformers\$CLASS_NAME$Transformer;
 use Modules\Core\Http\Controllers\Api\BaseApiController;
+use Modules\User\Contracts\Authentication;
 
 class $CLASS_NAME$Controller extends BaseApiController
 {
@@ -25,6 +25,7 @@ class $CLASS_NAME$Controller extends BaseApiController
         parent::__construct();
 
         $this->$LOWERCASE_CLASS_NAME$ = $$LOWERCASE_CLASS_NAME$;
+         $this->auth = app(Authentication::class);
     }
 
     /**
@@ -38,7 +39,7 @@ class $CLASS_NAME$Controller extends BaseApiController
 
           $params = $this->getParamsRequest($request);
 
-          $PLURAL_LOWERCASE_CLASS_NAME$ = $this->$LOWERCASE_CLASS_NAME$->getItemsBy($params);
+          $$PLURAL_LOWERCASE_CLASS_NAME$ = $this->$LOWERCASE_CLASS_NAME$->getItemsBy($params);
 
           $response = ["data" => $CLASS_NAME$Transformer::collection($$PLURAL_LOWERCASE_CLASS_NAME$)];
 
@@ -46,7 +47,7 @@ class $CLASS_NAME$Controller extends BaseApiController
 
         } catch (Exception $e) {
 
-            Log::Error($e);
+            \Log::Error($e);
             $status = $this->getStatusError($e->getCode());
             $response = ["errors" => $e->getMessage()];
 
@@ -73,7 +74,7 @@ class $CLASS_NAME$Controller extends BaseApiController
 
         } catch (Exception $e) {
 
-            Log::Error($e);
+            \Log::Error($e);
             $status = $this->getStatusError($e->getCode());
             $response = ["errors" => $e->getMessage()];
 
@@ -106,7 +107,7 @@ class $CLASS_NAME$Controller extends BaseApiController
 
         } catch (Exception $e) {
 
-            Log::Error($e);
+            \Log::Error($e);
             \DB::rollback();
             $status = $this->getStatusError($e->getCode());
             $response = ["errors" => $e->getMessage()];
@@ -142,13 +143,13 @@ class $CLASS_NAME$Controller extends BaseApiController
 
             $this->$LOWERCASE_CLASS_NAME$->update($$LOWERCASE_CLASS_NAME$, $request->all());
 
-            $response = ["data" => trans('core::core.messages.resource updated', ['name' => trans('$LOWERCASE_MODULE_NAME$::$PLURAL_LOWERCASE_CLASS_NAME$.title.$PLURAL_LOWERCASE_CLASS_NAME$')];
+            $response = ["data" => trans('core::core.messages.resource updated', ['name' => trans('$LOWERCASE_MODULE_NAME$::$PLURAL_LOWERCASE_CLASS_NAME$.title.$PLURAL_LOWERCASE_CLASS_NAME$')])];
 
             \DB::commit();
 
         } catch (Exception $e) {
 
-            Log::Error($e);
+            \Log::Error($e);
             \DB::rollback();
             $status = $this->getStatusError($e->getCode());
             $response = ["errors" => $e->getMessage()];
@@ -180,13 +181,13 @@ class $CLASS_NAME$Controller extends BaseApiController
 
             $this->$LOWERCASE_CLASS_NAME$->destroy($$LOWERCASE_CLASS_NAME$);
 
-            $response = ["data" => trans('core::core.messages.resource deleted', ['name' => trans('$LOWERCASE_MODULE_NAME$::$PLURAL_LOWERCASE_CLASS_NAME$.title.$PLURAL_LOWERCASE_CLASS_NAME$')];
+            $response = ["data" => trans('core::core.messages.resource deleted', ['name' => trans('$LOWERCASE_MODULE_NAME$::$PLURAL_LOWERCASE_CLASS_NAME$.title.$PLURAL_LOWERCASE_CLASS_NAME$')])];
 
             \DB::commit();
 
         } catch (Exception $e) {
 
-            Log::Error($e);
+            \Log::Error($e);
             \DB::rollback();
             $status = $this->getStatusError($e->getCode());
             $response = ["errors" => $e->getMessage()];

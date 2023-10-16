@@ -1,5 +1,8 @@
 url: https://github.com/tecnodesignc/workshop-module
 versions:
+  "2.1.1":
+    changed:
+      - fixed route-provider, service-provider and api-controller stubs
   "2.1.0":
     changed:
       - Laravel 10 compatibility
