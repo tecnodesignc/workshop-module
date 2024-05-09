@@ -3,29 +3,31 @@ $router->group(['prefix' =>'/$PLURAL_LOWERCASE_CLASS_NAME$'], function (Router $
     $router->get('/', [
         'as' => 'api.$LOWERCASE_MODULE_NAME$.$LOWERCASE_CLASS_NAME$.index',
         'uses' => '$CLASS_NAME$ApiController@index',
-        'middleware' => ['auth:api']
+        'middleware' => 'token-can:$LOWERCASE_MODULE_NAME$.$PLURAL_LOWERCASE_CLASS_NAME$.index'
     ]);
 
     $router->post('/', [
         'as' => 'api.$LOWERCASE_MODULE_NAME$.$LOWERCASE_CLASS_NAME$.store',
         'uses' => '$CLASS_NAME$ApiController@store',
-        'middleware' => ['auth:api']
+        'middleware' => 'can:$LOWERCASE_MODULE_NAME$.$PLURAL_LOWERCASE_CLASS_NAME$.create'
     ]);
 
-    $router->get('/{criteria}', [
+    $router->get('/{$LOWERCASE_CLASS_NAME$}', [
         'as' => 'api.$LOWERCASE_MODULE_NAME$.$LOWERCASE_CLASS_NAME$.show',
         'uses' => '$CLASS_NAME$ApiController@show',
-        'middleware' => ['auth:api']
+       'middleware' => 'token-can:$LOWERCASE_MODULE_NAME$.$PLURAL_LOWERCASE_CLASS_NAME$.index'
     ]);
-    $router->put('/{criteria}', [
+
+    $router->put('/{$LOWERCASE_CLASS_NAME$}', [
         'as' => 'api.$LOWERCASE_MODULE_NAME$.$LOWERCASE_CLASS_NAME$.update',
         'uses' => '$CLASS_NAME$Controller@update',
-        'middleware' => ['auth:api']
+        'middleware' => 'token-can:$LOWERCASE_MODULE_NAME$.$PLURAL_LOWERCASE_CLASS_NAME$.edit'
     ]);
-    $router->delete('/{criteria}', [
+
+    $router->delete('/{$LOWERCASE_CLASS_NAME$}', [
         'as' => 'api.$LOWERCASE_MODULE_NAME$.$LOWERCASE_CLASS_NAME$.destroy',
         'uses' => '$CLASS_NAME$ApiController@destroy',
-        'middleware' => ['auth:api']
+        'middleware' => 'token-can:$LOWERCASE_MODULE_NAME$.$PLURAL_LOWERCASE_CLASS_NAME$.destroy'
     ]);
 
 });

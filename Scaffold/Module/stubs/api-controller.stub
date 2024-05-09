@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\$MODULE_NAME$\Http\Controllers\Admin;
+namespace Modules\$MODULE_NAME$\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -13,7 +13,7 @@ use Modules\$MODULE_NAME$\Transformers\$CLASS_NAME$Transformer;
 use Modules\Core\Http\Controllers\Api\BaseApiController;
 use Modules\User\Contracts\Authentication;
 
-class $CLASS_NAME$Controller extends BaseApiController
+class $CLASS_NAME$ApiController extends BaseApiController
 {
     /**
      * @var $CLASS_NAME$Repository
@@ -49,28 +49,22 @@ class $CLASS_NAME$Controller extends BaseApiController
 
             \Log::Error($e);
             $status = $this->getStatusError($e->getCode());
-            $response = ["errors" => $e->getMessage()];
+            $response = ["error" => $e->getMessage()];
 
         }
 
         return response()->json($response ?? ["data" => "Request successful"], $status ?? 200);
     }
     /**
-    * Get a resource item
-    * @param string $criteria
+    * Show resource item.
+    * @param $CLASS_NAME$ $$LOWERCASE_CLASS_NAME$
     * @return JsonResponse
     */
-    public function show(string $criteria, Request $request): JsonResponse
+    public function show($CLASS_NAME$ $$LOWERCASE_CLASS_NAME$): JsonResponse
     {
         try {
 
-          $params = $this->getParamsRequest($request);
-
-          $$LOWERCASE_CLASS_NAME$ = $this->$LOWERCASE_CLASS_NAME$->getItem($params);
-
-          if(!$$LOWERCASE_CLASS_NAME$) throw new Exception(trans('core::core.exceptions.item no found', ['item' => trans('$LOWERCASE_MODULE_NAME$::$PLURAL_LOWERCASE_CLASS_NAME$.title.$PLURAL_LOWERCASE_CLASS_NAME$')]),404);
-
-          $response = ["data" => new $CLASS_NAME$Transformer($$LOWERCASE_CLASS_NAME$)];
+          $response = ["data" => new $CLASS_NAME$Transformer($LOWERCASE_CLASS_NAME$)];
 
         } catch (Exception $e) {
 
@@ -89,15 +83,11 @@ class $CLASS_NAME$Controller extends BaseApiController
     * @param Request $request
     * @return JsonResponse
     */
-    public function store(Request $request): JsonResponse
+    public function store(Create$CLASS_NAME$Request $request): JsonResponse
     {
         \DB::beginTransaction();
 
         try {
-
-            $data = $request->input('attributes') ?? [];
-
-            $this->validateRequestApi(new Create$CLASS_NAME$Request($data));
 
             $$LOWERCASE_CLASS_NAME$ = $this->$LOWERCASE_CLASS_NAME$->create($data);
 
@@ -121,25 +111,15 @@ class $CLASS_NAME$Controller extends BaseApiController
     /**
     * Update the specified resource in storage..
     *
-    * @param string $criteria
-    * @param Request $request
+    * @param  $CLASS_NAME$ $$LOWERCASE_CLASS_NAME$
+    * @param  Update$CLASS_NAME$Request $request
     * @return JsonResponse
     */
-    public function update(string $criteria, Request $request): JsonResponse
+    public function update($CLASS_NAME$ $$LOWERCASE_CLASS_NAME$, Update$CLASS_NAME$Request $request): JsonResponse
     {
         \DB::beginTransaction();
 
         try {
-
-            $data = $request->input('attributes') ?? [];
-
-            $this->validateRequestApi(new Update$CLASS_NAME$Request($data));
-
-            $params = $this->getParamsRequest($request);
-
-            $$LOWERCASE_CLASS_NAME$ = $this->$LOWERCASE_CLASS_NAME$->getItem($params);
-
-            if(!$$LOWERCASE_CLASS_NAME$) throw new Exception(trans('core::core.exceptions.item no found', ['item' => trans('$LOWERCASE_MODULE_NAME$::$PLURAL_LOWERCASE_CLASS_NAME$.title.$PLURAL_LOWERCASE_CLASS_NAME$')]),404);
 
             $this->$LOWERCASE_CLASS_NAME$->update($$LOWERCASE_CLASS_NAME$, $request->all());
 
@@ -163,22 +143,16 @@ class $CLASS_NAME$Controller extends BaseApiController
     /**
     * Remove the specified resource from storage.
     *
-    * @param string $criteria
-    * @param Request $request
+    * @param  $CLASS_NAME$ $$LOWERCASE_CLASS_NAME$
     * @return JsonResponse
     */
-    public function destroy(string $criteria, Request $request): JsonResponse
+    public function destroy($CLASS_NAME$ $$LOWERCASE_CLASS_NAME$): JsonResponse
     {
         \DB::beginTransaction();
 
         try {
 
             $params = $this->getParamsRequest($request);
-
-            $$LOWERCASE_CLASS_NAME$ = $this->$LOWERCASE_CLASS_NAME$->getItem($params);
-
-            if(!$$LOWERCASE_CLASS_NAME$) throw new Exception(trans('core::core.exceptions.item no found', ['item' => trans('$LOWERCASE_MODULE_NAME$::$PLURAL_LOWERCASE_CLASS_NAME$.title.$PLURAL_LOWERCASE_CLASS_NAME$')]),404);
-
             $this->$LOWERCASE_CLASS_NAME$->destroy($$LOWERCASE_CLASS_NAME$);
 
             $response = ["data" => trans('core::core.messages.resource deleted', ['name' => trans('$LOWERCASE_MODULE_NAME$::$PLURAL_LOWERCASE_CLASS_NAME$.title.$PLURAL_LOWERCASE_CLASS_NAME$')])];

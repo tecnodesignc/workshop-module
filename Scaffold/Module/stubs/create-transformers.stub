@@ -23,23 +23,19 @@ class $CLASS_NAME$Transformer extends JsonResource
             'id' => $this->when($this->id, $this->id),
             'created_at' => $this->when($this->created_at, $this->created_at),
             'update_at' => $this->when($this->created_at, $this->created_at),
-        ]
+        ];
 
-        $filter = json_decode($request->filter);
-
-        if (isset($filter->allTranslations) && $filter->allTranslations) {
-
-              $languages = \LaravelLocalization::getSupportedLocales();
-
-              foreach ($languages as $lang => $value) {
-
-              /* $data[$lang]['title'] = $this->hasTranslation($lang) ?
-                        $this->translate("$lang")['title'] : '';*/
-
-
-              }
+      /*  foreach (LaravelLocalization::getSupportedLocales() as $locale => $supportedLocale) {
+            $data[$locale] = [];
+            foreach ($this->translatedAttributes as $translatedAttribute) {
+                $data[$locale][$translatedAttribute] = $this->translateOrNew($locale)->$translatedAttribute;
+            }
         }
 
+        foreach ($this->tags as $tag) {
+            $data['tags'][] = $tag->name;
+        }
+        */
         return $data;
 
     }
