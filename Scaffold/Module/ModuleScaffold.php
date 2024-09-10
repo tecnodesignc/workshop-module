@@ -320,6 +320,7 @@ JSON;
     {
         //$this->finder->makeDirectory($this->getModulesPath('Sidebar'));
         $this->finder->makeDirectory($this->getModulesPath('Repositories/Cache'));
+        $this->finder->makeDirectory($this->getModulesPath('Presenters'));
     }
 
     /**

@@ -4,12 +4,18 @@ namespace Modules\$MODULE_NAME$\Entities;
 
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
+use Laracasts\Presenter\PresentableTrait;
+use Modules\$MODULE_NAME$\Presenters\$CLASS_NAME$Presenter;
 
 class $CLASS_NAME$ extends Model
 {
-    use Translatable;
+    use Translatable, PresentableTrait;
 
     protected $table = '$LOWERCASE_MODULE_NAME$__$PLURAL_LOWERCASE_CLASS_NAME$';
     public $translatedAttributes = [];
     protected $fillable = [];
+
+     protected string $presenter = $CLASS_NAME$Presenter::class;
+     protected $casts = [];
+
 }

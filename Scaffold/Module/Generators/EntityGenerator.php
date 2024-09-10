@@ -60,6 +60,7 @@ class EntityGenerator extends Generator
             $this->generateRepositoriesFor($entity);
             $this->generateControllerFor($entity);
             $this->generateRequestsFor($entity);
+            $this->generatePresentersFor($entity);
             $this->generateViewsFor($entity);
             $this->generateLanguageFilesFor($entity);
             $this->appendBindingsToServiceProviderFor($entity);
@@ -227,7 +228,23 @@ class EntityGenerator extends Generator
             $this->getContentForStub('create-transformers.stub', $entity)
         );
     }
-
+    /**
+     * Generate transformers file for eloquent entities
+     *
+     * @param string $entity
+     * @throws FileNotFoundException
+     */
+    private function generatePresentersFor(string $entity)
+    {
+        $path = $this->getModulesPath('Presenters');
+        if (! $this->finder->isDirectory($path)) {
+            $this->finder->makeDirectory($path);
+        }
+        $this->writeFile(
+            $this->getModulesPath("Presenters/{$entity}Presenter"),
+            $this->getContentForStub('create-presenter.stub', $entity)
+        );
+    }
     /**
      * Append the IoC bindings for the given entity to the Service Provider
      *

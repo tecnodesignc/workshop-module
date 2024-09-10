@@ -25,7 +25,7 @@ class $CLASS_NAME$ApiController extends BaseApiController
         parent::__construct();
 
         $this->$LOWERCASE_CLASS_NAME$ = $$LOWERCASE_CLASS_NAME$;
-         $this->auth = app(Authentication::class);
+        $this->auth = app(Authentication::class);
     }
 
     /**
@@ -64,7 +64,7 @@ class $CLASS_NAME$ApiController extends BaseApiController
     {
         try {
 
-          $response = ["data" => new $CLASS_NAME$Transformer($LOWERCASE_CLASS_NAME$)];
+          $response = ["data" => new $CLASS_NAME$Transformer($$LOWERCASE_CLASS_NAME$)];
 
         } catch (Exception $e) {
 
@@ -88,7 +88,7 @@ class $CLASS_NAME$ApiController extends BaseApiController
         \DB::beginTransaction();
 
         try {
-
+            $data = $request->all();
             $$LOWERCASE_CLASS_NAME$ = $this->$LOWERCASE_CLASS_NAME$->create($data);
 
             $response = ["data" => new $CLASS_NAME$Transformer($$LOWERCASE_CLASS_NAME$)];
@@ -152,7 +152,6 @@ class $CLASS_NAME$ApiController extends BaseApiController
 
         try {
 
-            $params = $this->getParamsRequest($request);
             $this->$LOWERCASE_CLASS_NAME$->destroy($$LOWERCASE_CLASS_NAME$);
 
             $response = ["data" => trans('core::core.messages.resource deleted', ['name' => trans('$LOWERCASE_MODULE_NAME$::$PLURAL_LOWERCASE_CLASS_NAME$.title.$PLURAL_LOWERCASE_CLASS_NAME$')])];

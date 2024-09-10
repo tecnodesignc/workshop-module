@@ -1,0 +1,15 @@
+<?php
+
+namespace Modules\$MODULE_NAME$\Presenters;
+
+use Laracasts\Presenter\Presenter;
+use Modules\$MODULE_NAME$\Presenters\$CLASS_NAME$Presenter;
+
+class $CLASS_NAME$Presenter extends Presenter
+{
+     public function __construct($entity)
+     {
+         parent::__construct($entity);
+     }
+
+}
