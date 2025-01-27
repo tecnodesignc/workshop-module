@@ -20,7 +20,7 @@ $router->group(['prefix' =>'/$PLURAL_LOWERCASE_CLASS_NAME$'], function (Router $
 
     $router->put('/{$LOWERCASE_CLASS_NAME$}', [
         'as' => 'api.$LOWERCASE_MODULE_NAME$.$LOWERCASE_CLASS_NAME$.update',
-        'uses' => '$CLASS_NAME$Controller@update',
+        'uses' => '$CLASS_NAME$ApiController@update',
         'middleware' => 'token-can:$LOWERCASE_MODULE_NAME$.$PLURAL_LOWERCASE_CLASS_NAME$.edit'
     ]);
 

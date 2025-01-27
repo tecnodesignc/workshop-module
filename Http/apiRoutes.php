@@ -14,4 +14,8 @@ $router->group(['prefix' => 'workshop', 'middleware' => 'api.token'], function (
         'uses' => 'ThemeController@publishAssets',
         'middleware' => 'token-can:workshop.themes.publish',
     ]);
+    $router->get('modules/permissions', [
+        'as' => 'api.workshop.module.permissions',
+        'uses' => 'ModulesController@permissions'
+    ]);
 });
