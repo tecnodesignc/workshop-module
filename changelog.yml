@@ -1,5 +1,8 @@
 url: https://github.com/tecnodesignc/workshop-module
 versions:
+  "3.0.2":
+    added:
+      - Service an routes Api for list Permission Modules
   "3.0.1":
     added:
       - Presenters stubs
